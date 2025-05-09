@@ -11,30 +11,33 @@ import courseRouter from './routes/courseRoute.js';
 
 const app = express();
 
-// Middlewares
-app.use(cors());
-app.use(express.json()); // Parsear JSON globalmente
+// 🔥🔥🔥 SOLUCIÓN 1: Configuración CORRECTA de CORS
+app.use(cors({
+  origin: 'https://sanpablo-lms.vercel.app', // Cambia esto por tu URL de frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
-// Rutas públicas (sin Clerk)
+app.use(express.json());
+
+// Rutas
 app.get('/', (req, res) => res.send("API Working"));
 app.use('/api/course', courseRouter);
-
-// Rutas privadas (con Clerk)
 app.use(clerkMiddleware());
 app.use('/api/user', userRouter);
 app.use('/api/educator', educatorRouter);
 
-// Webhooks (manejo especial de JSON)
+// Webhooks
 app.post('/clerk', clerkWebhooks);
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
-// Middleware de errores (¡ahora sí se ejecuta!)
+// Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-// Conexiones y inicio
+// Inicio
 await connectDB();
 await connectCloudinary();
 

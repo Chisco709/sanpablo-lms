@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AppContextProvider } from './context/AppContext.jsx'
 import { ClerkProvider } from '@clerk/clerk-react'
 
-// Import your publishable key
+// 🔥🔥🔥 SOLUCIÓN 3: Usa variables de entorno para la URL del backend
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!PUBLISHABLE_KEY) {
@@ -19,5 +19,5 @@ createRoot(document.getElementById('root')).render(
         <App />
       </AppContextProvider>
     </ClerkProvider>
-  </BrowserRouter>,
+  </BrowserRouter>
 )
